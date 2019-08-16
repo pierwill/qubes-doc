@@ -13,7 +13,7 @@ redirect_from:
 
 ## Goals
 
-The goals of the Admin API system is to provide a way for the user to manage the domains without direct access to dom0.
+The goal of the Admin API system is to provide a way for the user to manage domains without direct access to dom0.
 
 Foreseen benefits include:
 
