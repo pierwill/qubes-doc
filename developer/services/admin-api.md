@@ -138,23 +138,23 @@ This is to make it easy to set the policy using current mechanism.
 
 Volume properties:
 
- - `pool`
- - `vid`
- - `size`
- - `usage`
- - `rw`
- - `source`
- - `save_on_stop`
- - `snap_on_start`
- - `revisions_to_keep`
- - `is_outdated`
+- `pool`
+- `vid`
+- `size`
+- `usage`
+- `rw`
+- `source`
+- `save_on_stop`
+- `snap_on_start`
+- `revisions_to_keep`
+- `is_outdated`
 
 Method `admin.vm.Stats` returns `vm-stats` events every `stats_interval` seconds, for every running VM.
 Parameters of `vm-stats` events:
 
- - `memory_kb` - memory usage in kB
- - `cpu_time` - absolute CPU time (in milliseconds) spent by the VM since its startup, normalized for one CPU
- - `cpu_usage` - CPU usage in percents
+- `memory_kb` - memory usage in kB
+- `cpu_time` - absolute CPU time (in milliseconds) spent by the VM since its startup, normalized for one CPU
+- `cpu_usage` - CPU usage in percents
 
 
 ## Returned messages
