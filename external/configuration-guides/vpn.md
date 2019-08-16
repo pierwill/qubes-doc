@@ -12,24 +12,31 @@ redirect_from:
 How To make a VPN Gateway in Qubes
 ==================================
 
-Although setting up a VPN connection is not by itself Qubes specific, Qubes includes a number of tools that can make the client-side setup of your VPN more versatile and secure. This document is a Qubes-specific outline for choosing the type of VM to use, and shows how to prepare a ProxyVM for either NetworkManager or a set of fail-safe VPN scripts.
+Although setting up a VPN connection is not by itself Qubes specific, Qubes includes a number of tools that can make the client-side setup of your VPN more versatile and secure.
+This document is a Qubes-specific outline for choosing the type of VM to use, and shows how to prepare a ProxyVM for either NetworkManager or a set of fail-safe VPN scripts.
 
 Please refer to your guest OS and VPN service documentation when considering the specific steps and parameters for your connection(s); The relevant documentation for the Qubes default guest OS (Fedora) is [Establishing a VPN Connection.](https://docs.fedoraproject.org/en-US/Fedora/23/html/Networking_Guide/sec-Establishing_a_VPN_Connection.html)
 
 ### NetVM
 
-The simplest case is to set up a VPN connection using the NetworkManager service inside your NetVM. Because the NetworkManager service is already started, you are ready to set up your VPN connection. However this has some disadvantages:
+The simplest case is to set up a VPN connection using the NetworkManager service inside your NetVM.
+Because the NetworkManager service is already started, you are ready to set up your VPN connection.
+However this has some disadvantages:
 
 - You have to place (and probably save) your VPN credentials inside the NetVM, which is directly connected to the outside world
 - All your AppVMs which are connected to the NetVM will be connected to the VPN (by default)
 
 ### AppVM
 
-While the NetworkManager service is not started here (for a good reason), you can configure any kind of VPN client in your AppVM as well. However this is only suggested if your VPN client has special requirements.
+While the NetworkManager service is not started here (for a good reason), you can configure any kind of VPN client in your AppVM as well.
+However this is only suggested if your VPN client has special requirements.
 
 ### ProxyVM
 
-One of the best unique features of Qubes OS is its special type of VM called a ProxyVM. The special thing is that your AppVMs see this as a NetVM (or uplink), and your NetVMs see it as a downstream AppVM. Because of this, you can place a ProxyVM between your AppVMs and your NetVM. This is how the default sys-firewall VM functions.
+One of the best unique features of Qubes OS is its special type of VM called a ProxyVM.
+The special thing is that your AppVMs see this as a NetVM (or uplink), and your NetVMs see it as a downstream AppVM.
+Because of this, you can place a ProxyVM between your AppVMs and your NetVM.
+This is how the default sys-firewall VM functions.
 
 Using a ProxyVM to set up a VPN client gives you the ability to:
 
@@ -70,7 +77,8 @@ Set up a ProxyVM as a VPN gateway using NetworkManager
    vpn.secrets.password:XXXXXXXXXXXXXX
    ```
    And substitute "XXXXXXXXXXXXXX" for the actual password.
-   The contents of `passwd-file.txt` may differ depending on your VPN settings.  See the [documentation for `nmcli up`](https://www.mankier.com/1/nmcli#up).
+   The contents of `passwd-file.txt` may differ depending on your VPN settings.
+   See the [documentation for `nmcli up`](https://www.mankier.com/1/nmcli#up).
    
 5. (Optional) Make the network fail-close for the AppVMs if the connection to the VPN breaks.
 
@@ -219,7 +227,8 @@ It has been tested with Fedora 23 and Debian 8 templates.
 
        sudo chmod +x /rw/config/vpn/qubes-vpn-handler.sh
 
-4. Configure client to use the DNS handling script. Using openvpn as an example, edit the config.
+4. Configure client to use the DNS handling script.
+   Using openvpn as an example, edit the config.
 
        sudo nano /rw/config/vpn/openvpn-client.ovpn
 
@@ -319,6 +328,9 @@ Troubleshooting
 ---------------
 
 * Always test your basic VPN connection before adding scripts.
-* Test DNS: Ping a familiar domain name from an appVM. It should print the IP address for the domain.
-* For scripting: Ping external IP addresses from inside the VPN VM using `sudo sg qvpn -c 'ping ...'`, then from an appVM using just `ping ...`. Once the firewall rules are in place, you will have to use `sudo sg` to run any IP network commands in the VPN VM.
-* Use `iptables -L -v` and `iptables -L -v -t nat` to check firewall rules. The latter shows the critical PR-QBS chain that enables DNS forwarding.
+* Test DNS: Ping a familiar domain name from an appVM.
+  It should print the IP address for the domain.
+* For scripting: Ping external IP addresses from inside the VPN VM using `sudo sg qvpn -c 'ping ...'`, then from an appVM using just `ping ...`.
+  Once the firewall rules are in place, you will have to use `sudo sg` to run any IP network commands in the VPN VM.
+* Use `iptables -L -v` and `iptables -L -v -t nat` to check firewall rules.
+  The latter shows the critical PR-QBS chain that enables DNS forwarding.
