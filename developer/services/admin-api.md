@@ -28,9 +28,9 @@ The API would be used by:
 - remote management tools
 - any custom tools
 
-## Threat model
+<!-- ## Threat model -->
 
-TBD
+<!-- TODO describe threat model for Admin API -->
 
 ## Components
 
