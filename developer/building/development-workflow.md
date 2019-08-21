@@ -13,20 +13,14 @@ Development Workflow
 
 A workflow for developing Qubes OS+
 
-First things first, setup [QubesBuilder](/doc/qubes-builder/). This guide
-assumes you're using qubes-builder to build Qubes.
+First things first, setup [QubesBuilder](/doc/qubes-builder/). This guide assumes you're using qubes-builder to build Qubes.
 
 Repositories and committing Code
 --------------------------------
 
-Qubes is split into a bunch of git repos. This are all contained in the
-`qubes-src` directory under qubes-builder. Subdirectories there are separate
-components, stored in separate git repositories.
+Qubes is split into a bunch of git repos. This are all contained in the `qubes-src` directory under qubes-builder. Subdirectories there are separate components, stored in separate git repositories.
 
-The best way to write and contribute code is to create a git repo somewhere
-(e.g., github) for the repo you are interested in editing (e.g.,
-`qubes-manager`, `core-agent-linux`, etc). To integrate your repo with the rest
-of Qubes, cd to the repo directory and add your repository as a remote in git
+The best way to write and contribute code is to create a git repo somewhere (e.g., github) for the repo you are interested in editing (e.g., `qubes-manager`, `core-agent-linux`, etc). To integrate your repo with the rest of Qubes, cd to the repo directory and add your repository as a remote in git
 
 **Example:**
 
@@ -35,15 +29,9 @@ $ cd qubes-builder/qubes-src/qubes-manager
 $ git remote add abel git@github.com:abeluck/qubes-manager.git
 ~~~
 
-You can then proceed to easily develop in your own branches, pull in new
-commits from the dev branches, merge them, and eventually push to your own repo
-on github.
+You can then proceed to easily develop in your own branches, pull in new commits from the dev branches, merge them, and eventually push to your own repo on github.
 
-When you are ready to submit your changes to Qubes to be merged, push your
-changes, then create a signed git tag (using `git tag -s`). Finally, send a
-letter to the Qubes listserv describing the changes and including the link to
-your repository. You can also create pull request on github. Don't forget to
-include your public PGP key you use to sign your tags.
+When you are ready to submit your changes to Qubes to be merged, push your changes, then create a signed git tag (using `git tag -s`). Finally, send a letter to the Qubes listserv describing the changes and including the link to your repository. You can also create pull request on github. Don't forget to include your public PGP key you use to sign your tags.
 
 ### Kernel-specific notes
 
@@ -121,14 +109,9 @@ vi series.conf
 
 TODO: Is this step generic for all subsystems?
 
-Now it is a good moment to make sure you have changed kernel release name in
-rel file. For example, if you change it to '1debug201211116c' the
-resulting RPMs will be named
-'kernel-3.4.18-1debug20121116c.pvops.qubes.x86\_64.rpm'. This will help
-distinguish between different versions of the same package.
+Now it is a good moment to make sure you have changed kernel release name in rel file. For example, if you change it to '1debug201211116c' the resulting RPMs will be named 'kernel-3.4.18-1debug20121116c.pvops.qubes.x86\_64.rpm'. This will help distinguish between different versions of the same package.
 
-You might want to take a moment here to review (git diff, git status), commit
-your changes locally.
+You might want to take a moment here to review (git diff, git status), commit your changes locally.
 
 To actually build RPMS, in qubes-builder:
 
@@ -149,31 +132,19 @@ RPMS will appear in qubes-src/linux-kernel/pkgs/fc20/x86\_64:
 
 ### Useful [QubesBuilder](/doc/qubes-builder/) commands
 
-1.  `make check` - will check if all the code was committed into repository and
-if all repository are tagged with signed tag.
-2.  `make show-vtags` - show version of each component (based on git tags) -
-mostly useful just before building ISO. **Note:** this will not show version
-for components containing changes since last version tag
-3.  `make push` - push change from **all** repositories to git server. You must
-set proper remotes (see above) for all repositories first.
-4.  `make prepare-merge` - fetch changes from remote repositories (can be
-specified on commandline via GIT\_SUBDIR or GIT\_REMOTE vars), (optionally)
-verify tags and show the changes. This do not merge the changes - there are
-left for review as FETCH\_HEAD ref. You can merge them using `git merge
-FETCH_HEAD` (in each repo directory). Or `make do-merge` to merge all of them.
+1.  `make check` - will check if all the code was committed into repository and if all repository are tagged with signed tag.
+2.  `make show-vtags` - show version of each component (based on git tags) - mostly useful just before building ISO. **Note:** this will not show version for components containing changes since last version tag
+3.  `make push` - push change from **all** repositories to git server. You must set proper remotes (see above) for all repositories first.
+4.  `make prepare-merge` - fetch changes from remote repositories (can be specified on commandline via GIT\_SUBDIR or GIT\_REMOTE vars), (optionally) verify tags and show the changes. This do not merge the changes - there are left for review as FETCH\_HEAD ref. You can merge them using `git merge FETCH_HEAD` (in each repo directory). Or `make do-merge` to merge all of them.
 
 Copying Code to dom0
 --------------------
 
-When developing it is convenient to be able to rapidly test changes. Assuming
-you're developing Qubes on Qubes, you should be working in a special VM for
-Qubes and occasionally you will want to transfer code or rpms back to dom0 for
-testing.
+When developing it is convenient to be able to rapidly test changes. Assuming you're developing Qubes on Qubes, you should be working in a special VM for Qubes and occasionally you will want to transfer code or rpms back to dom0 for testing.
 
 Here are some handy scripts Marek has shared to facilitate this.
 
-You may also like to run your [test environment on separate
-machine](/doc/test-bench/).
+You may also like to run your [test environment on separate machine](/doc/test-bench/).
 
 ### Syncing dom0 files
 
@@ -234,13 +205,9 @@ cat $file| qvm-run --pass-io $domain "cat > /home/user/incoming/dom0/$fname"
 
 ## Git connection between VMs
 
-Sometimes it's useful to transfer git commits between VMs. You can use `git
-format-patch` for that and simply copy the files. But you can also setup
-custom qrexec service for it.
+Sometimes it's useful to transfer git commits between VMs. You can use `git format-patch` for that and simply copy the files. But you can also setup custom qrexec service for it.
 
-Below example assumes that you use `builder-RX` directory in target VM to
-store sources in qubes-builder layout (where `X` is some number). Make sure that
-all the scripts are executable.
+Below example assumes that you use `builder-RX` directory in target VM to store sources in qubes-builder layout (where `X` is some number). Make sure that all the scripts are executable.
 
 Service file (save in `/usr/local/etc/qubes-rpc/local.Git` in target VM):
 
@@ -303,30 +270,18 @@ fi
 git remote add $1 git@github.com:$1/qubes-`basename $PWD`
 ~~~
 
-It should be executed from component top level directory. This script takes one
-argument - remote name. If it is `tb`, then it creates qrexec-based git remote
-to `testbuilder` VM. Otherwise it creates remote pointing at github account of
-the same name. In any case it points at repository matching current directory
-name.
+It should be executed from component top level directory. This script takes one argument - remote name. If it is `tb`, then it creates qrexec-based git remote to `testbuilder` VM. Otherwise it creates remote pointing at github account of the same name. In any case it points at repository matching current directory name.
 
 
 ## Sending packages to different VM
 
-Other useful script(s) can be used to setup local package repository hosted in
-some VM. This way you can keep your development VM behind firewall, while
-having an option to expose some yum/apt repository to the local network (to
-have them installed on test machine).
+Other useful script(s) can be used to setup local package repository hosted in some VM. This way you can keep your development VM behind firewall, while having an option to expose some yum/apt repository to the local network (to have them installed on test machine).
 
-To achieve this goal, a dummy repository can be created, which instead of
-populating metadata locally, will upload the packages to some other VM and
-trigger repository update there (using qrexec). You can use `unstable`
-repository flavor, because there is no release managing rules bundled (unlike
-current and current-testing).
+To achieve this goal, a dummy repository can be created, which instead of populating metadata locally, will upload the packages to some other VM and trigger repository update there (using qrexec). You can use `unstable` repository flavor, because there is no release managing rules bundled (unlike current and current-testing).
 
 ### RPM packages - yum repo
 
-In source VM, grab [linux-yum] repository (below is assumed you've made it in
-`~/repo-yum-upload` directory) and replace `update_repo.sh` script with:
+In source VM, grab [linux-yum] repository (below is assumed you've made it in `~/repo-yum-upload` directory) and replace `update_repo.sh` script with:
 
 ~~~
 #!/bin/sh
@@ -341,11 +296,7 @@ find -type f -name '*.rpm' -delete
 qrexec-client-vm $VMNAME local.UpdateYum
 ~~~
 
-In target VM, setup actual yum repository (also based on [linux-yum], this time
-without modifications). You will also need to setup some gpg key for signing
-packages (it is possible to force yum to install unsigned packages, but it
-isn't possible for `qubes-dom0-update` tool). Fill `~/.rpmmacros` with
-key description:
+In target VM, setup actual yum repository (also based on [linux-yum], this time without modifications). You will also need to setup some gpg key for signing packages (it is possible to force yum to install unsigned packages, but it isn't possible for `qubes-dom0-update` tool). Fill `~/.rpmmacros` with key description:
 
 ~~~
 %_gpg_name Test packages signing key
@@ -383,14 +334,9 @@ find $incoming -type d -empty -delete
 exit 0
 ~~~
 
-Of course you will also need to setup qrexec policy in dom0
-`/etc/qubes-rpc/policy/local.UpdateYum`.
+Of course you will also need to setup qrexec policy in dom0 `/etc/qubes-rpc/policy/local.UpdateYum`.
 
-If you want to access the repository from network, you need to setup HTTP
-server serving it, and configure the system to let other machines actually
-reach this HTTP server. You can use for example using [port
-forwarding][port-forwarding] or setting up Tor hidden service. Configuration
-details of those services are outside of the scope of this page.
+If you want to access the repository from network, you need to setup HTTP server serving it, and configure the system to let other machines actually reach this HTTP server. You can use for example using [port forwarding][port-forwarding] or setting up Tor hidden service. Configuration details of those services are outside of the scope of this page.
 
 Usage: setup `builder.conf` in source VM to use your dummy-uploader repository:
 
@@ -398,16 +344,13 @@ Usage: setup `builder.conf` in source VM to use your dummy-uploader repository:
 LINUX_REPO_BASEDIR = ../../repo-yum-upload/r3.1
 ~~~
 
-Then use `make update-repo-unstable` to upload the packages. You can also
-specify selected components on command line, then build them and upload to the
-repository:
+Then use `make update-repo-unstable` to upload the packages. You can also specify selected components on command line, then build them and upload to the repository:
 
 ~~~
 make COMPONENTS="core-agent-linux gui-agent-linux linux-utils" qubes update-repo-unstable
 ~~~
 
-On the test machine, add yum repository (`/etc/yum.repos.d`) pointing at just
-configured HTTP server. For example:
+On the test machine, add yum repository (`/etc/yum.repos.d`) pointing at just configured HTTP server. For example:
 
 ~~~
 [local-test]
