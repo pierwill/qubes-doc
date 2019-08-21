@@ -19,11 +19,11 @@ This guide assumes you're using qubes-builder to build Qubes.
 Repositories and committing Code
 --------------------------------
 
-Qubes is split into a bunch of git repos.
-This are all contained in the `qubes-src` directory under qubes-builder.
-Subdirectories there are separate components, stored in separate git repositories.
+The Qubes source code is contained in several git repositories.
+For development, QubesBuilder creates a directory called `qubes-src` and places all the required code there.
+Subdirectories in `qubes-src` are separate components, stored in separate git repositories.
 
-The best way to write and contribute code is to create a git repo somewhere (e.g., github) for the repo you are interested in editing (e.g., `qubes-manager`, `core-agent-linux`, etc).
+The best way to write and contribute code is to create a git repo somewhere (e.g., GitHub) for the repo you are interested in editing (e.g., `qubes-manager`, `core-agent-linux`, etc).
 To integrate your repo with the rest of Qubes, cd to the repo directory and add your repository as a remote in git
 
 **Example:**
@@ -33,11 +33,11 @@ $ cd qubes-builder/qubes-src/qubes-manager
 $ git remote add abel git@github.com:abeluck/qubes-manager.git
 ~~~
 
-You can then proceed to easily develop in your own branches, pull in new commits from the dev branches, merge them, and eventually push to your own repo on github.
+You can then proceed to easily develop in your own branches, pull in new commits from the dev branches, merge them, and eventually push to your own repo on GitHub.
 
 When you are ready to submit your changes to Qubes to be merged, push your changes, then create a signed git tag (using `git tag -s`).
 Finally, send a letter to the Qubes listserv describing the changes and including the link to your repository.
-You can also create pull request on github.
+You can also create pull request on GitHub.
 Don't forget to include your public PGP key you use to sign your tags.
 
 ### Kernel-specific notes
@@ -93,7 +93,7 @@ cp .config ../../../config
 
 #### Patching the code
 
-TODO: describe the workflow for patching the code, below are some random notes, not working well
+<!-- TODO: describe the workflow for patching the code, below are some random notes, not working well -->
 
 ~~~
 ln -s ../../patches.xen
@@ -113,9 +113,9 @@ cd ../..
 vi series.conf
 ~~~
 
-#### Building RPMS
+#### Building RPMs
 
-TODO: Is this step generic for all subsystems?
+<!-- TODO: Is this step generic for all subsystems? -->
 
 Now it is a good moment to make sure you have changed kernel release name in rel file.
 For example, if you change it to '1debug201211116c' the resulting RPMs will be named 'kernel-3.4.18-1debug20121116c.pvops.qubes.x86\_64.rpm'.
@@ -123,13 +123,13 @@ This will help distinguish between different versions of the same package.
 
 You might want to take a moment here to review (git diff, git status), commit your changes locally.
 
-To actually build RPMS, in qubes-builder:
+To actually build RPMs, in qubes-builder:
 
 ~~~
 make linux-kernel
 ~~~
 
-RPMS will appear in qubes-src/linux-kernel/pkgs/fc20/x86\_64:
+RPMs will appear in qubes-src/linux-kernel/pkgs/fc20/x86\_64:
 
 ~~~
 -rw-rw-r-- 1 user user 42996126 Nov 17 04:08 kernel-3.4.18-1debug20121116c.pvops.qubes.x86_64.rpm
@@ -144,19 +144,19 @@ RPMS will appear in qubes-src/linux-kernel/pkgs/fc20/x86\_64:
 
 1.  `make check` - will check if all the code was committed into repository and if all repository are tagged with signed tag.
 2.  `make show-vtags` - show version of each component (based on git tags) - mostly useful just before building ISO.
-**Note:** this will not show version for components containing changes since last version tag
+    **Note:** this will not show version for components containing changes since last version tag
 3.  `make push` - push change from **all** repositories to git server.
-You must set proper remotes (see above) for all repositories first.
+    You must set proper remotes (see above) for all repositories first.
 4.  `make prepare-merge` - fetch changes from remote repositories (can be specified on commandline via GIT\_SUBDIR or GIT\_REMOTE vars), (optionally) verify tags and show the changes.
-This do not merge the changes - there are left for review as FETCH\_HEAD ref.
-You can merge them using `git merge FETCH_HEAD` (in each repo directory).
-Or `make do-merge` to merge all of them.
+    This do not merge the changes - there are left for review as FETCH\_HEAD ref.
+    You can merge them using `git merge FETCH_HEAD` (in each repo directory).
+    Or `make do-merge` to merge all of them.
 
 Copying Code to dom0
 --------------------
 
 When developing it is convenient to be able to rapidly test changes.
-Assuming you're developing Qubes on Qubes, you should be working in a special VM for Qubes and occasionally you will want to transfer code or rpms back to dom0 for testing.
+Assuming you're developing Qubes on Qubes, you should be working in a special VM for Qubes and occasionally you will want to transfer code or RPMs back to dom0 for testing.
 
 Here are some handy scripts Marek has shared to facilitate this.
 
@@ -164,7 +164,7 @@ You may also like to run your [test environment on separate machine](/doc/test-b
 
 ### Syncing dom0 files
 
-TODO: edit this script to be more generic
+<!-- TODO: edit this script to be more generic -->
 
 ~~~
 #!/bin/sh
@@ -193,7 +193,7 @@ sudo cp aux-tools/qubes-dom0-updates.cron /etc/cron.daily/
 
 ### Apply qvm-tools
 
-TODO: make it more generic
+<!-- TODO: make it more generic -->
 
 ~~~
 #!/bin/sh
@@ -292,7 +292,7 @@ git remote add $1 git@github.com:$1/qubes-`basename $PWD`
 It should be executed from component top level directory.
 This script takes one argument - remote name.
 If it is `tb`, then it creates qrexec-based git remote to `testbuilder` VM.
-Otherwise it creates remote pointing at github account of the same name.
+Otherwise it creates remote pointing at GitHub account of the same name.
 In any case it points at repository matching current directory name.
 
 
@@ -363,8 +363,8 @@ exit 0
 
 Of course you will also need to setup qrexec policy in dom0 `/etc/qubes-rpc/policy/local.UpdateYum`.
 
-If you want to access the repository from network, you need to setup HTTP server serving it, and configure the system to let other machines actually reach this HTTP server.
-You can use for example using [port forwarding][port-forwarding] or setting up Tor hidden service.
+If you want to access the repository from network, you will need to set up an HTTP server, and configure the system to let other machines connect to it.
+This could be accomplished using [port forwarding][port-forwarding], or by setting up a Tor hidden service.
 Configuration details of those services are outside of the scope of this page.
 
 Usage: setup `builder.conf` in source VM to use your dummy-uploader repository:
@@ -374,7 +374,7 @@ LINUX_REPO_BASEDIR = ../../repo-yum-upload/r3.1
 ~~~
 
 Then use `make update-repo-unstable` to upload the packages.
-You can also specify selected components on command line, then build them and upload to the repository:
+You can also specify selected components on the command line, then build them and upload to the repository:
 
 ~~~
 make COMPONENTS="core-agent-linux gui-agent-linux linux-utils" qubes update-repo-unstable
