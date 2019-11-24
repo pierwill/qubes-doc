@@ -16,26 +16,26 @@ DisposableVM implementation in Qubes
 DisposableVM image preparation
 ------------------------------
 
-DisposableVM is not started like other VMs, by executing equivalent of `xl create` - it would be too slow.
+DisposableVMs are not started like other VMs, by executing equivalent of `xl create` - it would be too slow.
 Instead, DisposableVM are started by restore from a savefile.
 
 Preparing a savefile is done by `/usr/lib/qubes/qubes_prepare_saved_domain.sh` script.
-It takes two mandatory arguments, appvm name (APPVM) and the savefile name, and optional path to "prerun" script.
+It takes two mandatory arguments, appvm name (AppVM) and the savefile name, and optional path to "prerun" script.
 The script executes the following steps:
 
-1.  APPVM is started by `qvm-start`
+1.  AppVM is started by `qvm-start`
 2.  xenstore key `/local/domain/appvm_domain_id/qubes_save_request` is created
 3.  if prerun script was specified, copy it to `qubes_save_script` xenstore key
 4.  wait for the `qubes_used_mem` key to appear
-5.  (in APPVM) APPVM boots normally, up to the point in `/etc/init.d/qubes_core` script when the presence of `qubes_save_request` key is tested.
+5.  (in AppVM) AppVM boots normally, up to the point in `/etc/init.d/qubes_core` script when the presence of `qubes_save_request` key is tested.
     If it exists, then
-    1.  (in APPVM) if exists, prerun script is retrieved from the respective xenstore key and executed.
+    1.  (in AppVM) if exists, prerun script is retrieved from the respective xenstore key and executed.
         This preloads filesystem cache with useful applications, so that they will start faster.
-    2.  (in APPVM) the amount of used memory is stored to `qubes_used_mem` xenstore key
-    3.  (in APPVM) busy-waiting for `qubes_restore_complete` xenstore key to appear
+    2.  (in AppVM) the amount of used memory is stored to `qubes_used_mem` xenstore key
+    3.  (in AppVM) busy-waiting for `qubes_restore_complete` xenstore key to appear
 
 6.  when `qubes_used_mem` key appears, the domain memory is reduced to this amount, to make the savefile smaller.
-7.  APPVM private image is detached
+7.  AppVM private image is detached
 8.  the domain is saved via `xl save`
 9.  the COW file volatile.img (cow for root fs and swap) is packed to `saved_cows.tar` archive
 
@@ -58,7 +58,7 @@ Its main steps are:
 6.  create the `qubes_restore_complete` xenstore key.
     This allows the boot process in DisposableVM to continue.
 
-The actual passing of files between AppVM and a DisposableVM is implemented via qubes rpc.
+The actual passing of files between AppVM and a DisposableVM is implemented via the [Qubes RPC](/doc/qrexec).
 
 Validating the DisposableVM savefile
 ------------------------------------
