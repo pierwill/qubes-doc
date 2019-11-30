@@ -8,13 +8,10 @@ redirect_from:
 - /wiki/DVMimpl/
 ---
 
-DisposableVM implementation in Qubes
-====================================
+# DisposableVM implementation
+<!-- **Note: The content below applies to Qubes R3.2.** -->
 
-**Note: The content below applies to Qubes R3.2.**
-
-DisposableVM image preparation
-------------------------------
+## DisposableVM image preparation
 
 DisposableVMs are not started like other VMs, by executing equivalent of `xl create` - it would be too slow.
 Instead, DisposableVM are started by restore from a savefile.
@@ -42,8 +39,7 @@ The script executes the following steps:
 The `qubes_prepare_saved_domain.sh` script is lowlevel.
 It is usually called by `qvm-create-default-dvm` script, that takes care of creating a special AppVM (named template\_name-dvm) to be passed to `qubes_prepare_saved_domain.sh`, as well as copying the savefile to /dev/shm (the latter action is not done if the `/var/lib/qubes/dvmdata/dont_use_shm` file exists).
 
-Restoring a DisposableVM from the savefile
-------------------------------------------
+## Restoring a DisposableVM from the savefile
 
 Normally, disposable VM is created when qubes rpc request with target *\$dispvm* is received.
 Then, as a part of rpc connection setup, the `qfile-daemon-dvm` program is executed; it executes `/usr/lib/qubes/qubes_restore` program.
@@ -60,8 +56,7 @@ Its main steps are:
 
 The actual passing of files between AppVM and a DisposableVM is implemented via the [Qubes RPC](/doc/qrexec).
 
-Validating the DisposableVM savefile
-------------------------------------
+## Validating the DisposableVM savefile
 
 DisposableVM savefile contains references to template rootfs and to COW files.
 The COW files are restored before each DisposableVM start, so they cannot change.
